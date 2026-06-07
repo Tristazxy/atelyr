@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATELYR — Where designers own their craft</title>
+<style>
+  :root{
+    --ink:#1A1423; --ink2:#241A30; --ink3:#2E2240;
+    --violet:#6B2FB5; --vlight:#9B5DE5; --vsoft:#F2E9FA;
+    --gold:#F4A93C; --gold-d:#D98E1E;
+    --cream:#FBF7F2; --card:#FFFFFF;
+    --text:#2B2330; --muted:#857B8F; --line:#EAE3EF;
+    --ok:#2E9E6B;
+    --shadow:0 10px 30px rgba(26,20,35,.10);
+    --shadow-lg:0 24px 60px rgba(26,20,35,.18);
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--text);background:var(--cream);line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.serif{font-family:var(--serif)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--violet);display:flex;align-items:center;gap:9px}
+  .eyebrow::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--gold)}
+  .eyebrow.on-dark{color:var(--vlight)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;transition:.18s;line-height:1}
+  .btn-gold{background:var(--gold);color:var(--ink)}
+  .btn-gold:hover{background:var(--gold-d);transform:translateY(-1px)}
+  .btn-violet{background:var(--violet);color:#fff}
+  .btn-violet:hover{background:#581f9c;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--violet);color:var(--violet)}
+  .btn-ghost.on-dark{border-color:rgba(255,255,255,.25);color:#fff}
+  .btn-ghost.on-dark:hover{border-color:var(--gold);color:var(--gold)}
+  .btn-sm{padding:9px 16px;font-size:13px}
+  .pill{display:inline-block;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;background:var(--vsoft);color:var(--violet)}
+  .pill.gold{background:#FCEFD7;color:var(--gold-d)}
+
+  /* ---------- HEADER ---------- */
+  header.nav{position:sticky;top:0;z-index:50;background:rgba(251,247,242,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;gap:30px;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:700;font-size:21px;letter-spacing:2px;cursor:pointer}
+  .logo .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--violet),var(--vlight));display:grid;place-items:center;color:#fff;font-size:16px}
+  nav.menu{display:flex;gap:4px;margin-left:8px}
+  nav.menu a{padding:8px 13px;border-radius:8px;font-size:14.5px;font-weight:600;color:#5b5266;cursor:pointer;transition:.15s}
+  nav.menu a:hover{background:var(--vsoft);color:var(--violet)}
+  nav.menu a.active{color:var(--violet);background:var(--vsoft)}
+  .nav-spacer{flex:1}
+  .nav-cta{display:flex;align-items:center;gap:10px}
+  .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#E8A0BF,#9B5DE5);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+
+  /* ---------- PAGE SYSTEM ---------- */
+  .page{display:none;animation:fade .35s ease}
+  .page.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  section{padding:64px 0}
+  .section-head{max-width:640px;margin-bottom:38px}
+  .section-head h2{font-size:34px;line-height:1.12;margin:14px 0 10px}
+  .section-head p{color:var(--muted);font-size:17px}
+
+  /* ---------- HERO ---------- */
+  .hero{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(107,47,181,.55),transparent 70%);top:-160px;right:-120px}
+  .hero::after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(244,169,60,.30),transparent 70%);bottom:-140px;right:160px}
+  .hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-top:74px;padding-bottom:78px}
+  .hero h1{font-size:52px;line-height:1.05;letter-spacing:-.5px}
+  .hero h1 .g{color:var(--gold)}
+  .hero p.sub{font-size:18px;color:#D4C9DF;margin:22px 0 30px;max-width:520px}
+  .hero .actions{display:flex;gap:14px;flex-wrap:wrap}
+  .hero .trust{margin-top:34px;display:flex;gap:30px;color:#B7AAC6;font-size:13px}
+  .hero .trust b{color:#fff;font-size:22px;font-family:var(--serif);display:block}
+  /* hero collage */
+  .collage{position:relative;height:420px}
+  .frame{position:absolute;border-radius:18px;overflow:hidden;box-shadow:var(--shadow-lg);border:5px solid #fff}
+  .frame.f1{width:230px;height:290px;top:0;right:40px;transform:rotate(4deg);z-index:2}
+  .frame.f2{width:190px;height:230px;bottom:10px;right:230px;transform:rotate(-6deg);z-index:3}
+  .frame.f3{width:160px;height:150px;top:30px;right:280px;transform:rotate(-3deg);z-index:1}
+  .badge-float{position:absolute;z-index:5;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--text)}
+  .badge-float .dot{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:15px}
+  .bf1{bottom:42px;left:-6px}
+  .bf2{top:-14px;left:40px}
+
+  /* ---------- ART SWATCHES (placeholder artwork) ---------- */
+  .art{width:100%;height:100%;display:block}
+
+  /* ---------- LOGO STRIP ---------- */
+  .strip{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0}
+  .strip .wrap{display:flex;align-items:center;gap:34px;flex-wrap:wrap;justify-content:center;color:#A99FB5;font-weight:700;letter-spacing:1px;font-size:14px}
+
+  /* ---------- PILLARS ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;transition:.2s}
+  .pcard:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .pcard .ico{width:52px;height:52px;border-radius:13px;background:var(--vsoft);display:grid;place-items:center;font-size:24px;margin-bottom:16px}
+  .pcard.own .ico{background:#FCEFD7}
+  .pcard h3{font-size:21px;margin-bottom:8px}
+  .pcard p{color:var(--muted);font-size:14.5px}
+  .pcard .top{height:4px;border-radius:4px;background:var(--violet);width:40px;margin-bottom:18px}
+  .pcard.own .top{background:var(--gold)}
+
+  /* ---------- HOW ---------- */
+  .how{background:var(--ink);color:#fff}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+  .step{background:var(--ink2);border:1px solid #3a2d4c;border-radius:var(--r);padding:24px;position:relative}
+  .step .n{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--gold);letter-spacing:2px}
+  .step h3{color:#fff;font-size:19px;margin:8px 0 8px}
+  .step p{color:#B7AAC6;font-size:14px}
+  .step .ico{width:46px;height:46px;border-radius:12px;background:var(--violet);display:grid;place-items:center;font-size:21px;margin-bottom:14px}
+  .step.own .ico{background:var(--gold)}
+
+  /* ---------- GALLERY / GRID ---------- */
+  .grid-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .work{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.2s}
+  .work:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+  .work .thumb{height:210px;position:relative}
+  .work .thumb .tag{position:absolute;top:12px;left:12px}
+  .work .thumb .ai{position:absolute;top:12px;right:12px;background:rgba(26,20,35,.82);color:#fff;font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;align-items:center;gap:5px}
+  .work .meta{padding:16px 18px}
+  .work .meta .by{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+  .work .meta .by .avatar{width:26px;height:26px;font-size:11px}
+  .work .meta .by span{font-size:13px;color:var(--muted);font-weight:600}
+  .work .meta h4{font-size:17px;font-family:var(--serif);margin-bottom:4px}
+  .work .meta .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .work .meta .price{font-weight:800;font-size:16px}
+  .work .meta .price small{font-weight:600;color:var(--muted);font-size:12px}
+
+  /* ---------- FILTER BAR ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+  .chip{padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;cursor:pointer;color:#5b5266;transition:.15s}
+  .chip:hover{border-color:var(--vlight)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- DESIGNER PROFILE ---------- */
+  .profile-hero{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+  .profile-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% -20%,rgba(107,47,181,.5),transparent 55%)}
+  .profile-hero .wrap{position:relative;z-index:2;padding:54px 28px;display:flex;gap:30px;align-items:center}
+  .profile-hero .pic{width:120px;height:120px;border-radius:24px;background:linear-gradient(135deg,#E8A0BF,#9B5DE5);display:grid;place-items:center;font-size:42px;font-family:var(--serif);font-weight:700;color:#fff;flex-shrink:0;border:4px solid rgba(255,255,255,.15)}
+  .profile-hero h1{font-size:38px}
+  .profile-hero .handle{color:var(--gold);font-weight:700;margin:4px 0 10px}
+  .profile-hero p{color:#CFC4DA;max-width:560px}
+  .pstats{display:flex;gap:34px;margin-top:18px}
+  .pstats div b{font-family:var(--serif);font-size:24px;display:block}
+  .pstats div span{font-size:12.5px;color:#B7AAC6}
+  .tabbar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin:34px 0 30px}
+  .tabbar a{padding:12px 18px;font-weight:700;font-size:15px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+  .tabbar a.active{color:var(--violet);border-color:var(--violet)}
+
+  /* style ai promo band on profile */
+  .styleband{background:linear-gradient(120deg,var(--ink),var(--ink3));color:#fff;border-radius:22px;padding:34px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin:8px 0 34px;position:relative;overflow:hidden}
+  .styleband::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(244,169,60,.3),transparent 70%);right:-60px;top:-60px}
+  .styleband h3{font-size:24px;margin-bottom:8px}
+  .styleband p{color:#CFC4DA;max-width:520px;position:relative;z-index:2}
+
+  /* ---------- WORK DETAIL ---------- */
+  .detail{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;padding:44px 0}
+  .detail .big{border-radius:20px;overflow:hidden;height:480px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  .thumbs{display:flex;gap:12px;margin-top:14px}
+  .thumbs .t{width:74px;height:74px;border-radius:12px;overflow:hidden;border:2px solid var(--line);cursor:pointer}
+  .thumbs .t.active{border-color:var(--violet)}
+  .detail .by{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .detail .by .avatar{width:34px;height:34px;font-size:13px}
+  .detail h1{font-size:32px;margin-bottom:6px}
+  .detail .desc{color:var(--muted);margin:16px 0}
+  .licbox{border:1px solid var(--line);border-radius:16px;padding:6px;margin:18px 0}
+  .lic{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:12px;cursor:pointer;border:2px solid transparent}
+  .lic:hover{background:var(--cream)}
+  .lic.active{border-color:var(--violet);background:var(--vsoft)}
+  .lic .l h4{font-size:15px}
+  .lic .l p{font-size:12.5px;color:var(--muted)}
+  .lic .p{font-weight:800;font-size:17px}
+  .own-note{display:flex;gap:10px;align-items:flex-start;background:#FCEFD7;border-radius:12px;padding:13px 15px;font-size:13px;color:#7a5a12;margin-top:18px}
+
+  /* ---------- STYLE AI STUDIO ---------- */
+  .studio{display:grid;grid-template-columns:330px 1fr;gap:28px;padding:34px 0}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+  .panel label{font-size:13px;font-weight:700;display:block;margin:16px 0 7px;color:#4a4256}
+  .panel label:first-of-type{margin-top:0}
+  .panel textarea,.panel select,.panel input{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;font-family:var(--sans);font-size:14px;color:var(--text);background:#fff;resize:vertical}
+  .panel textarea:focus,.panel select:focus,.panel input:focus{outline:none;border-color:var(--violet)}
+  .modelchip{display:flex;align-items:center;gap:11px;background:var(--vsoft);border-radius:12px;padding:12px;margin-bottom:6px}
+  .modelchip .avatar{width:34px;height:34px;font-size:13px}
+  .modelchip b{font-size:14px}.modelchip span{font-size:12px;color:var(--violet)}
+  .canvas{background:var(--ink);border-radius:var(--r);min-height:520px;padding:24px;color:#fff;position:relative;overflow:hidden}
+  .canvas .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .gen-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .gen{border-radius:14px;overflow:hidden;position:relative;aspect-ratio:1;border:1px solid #3a2d4c}
+  .gen .ovl{position:absolute;left:10px;bottom:10px;background:rgba(26,20,35,.78);font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;gap:5px;align-items:center}
+  .empty-state{display:grid;place-items:center;height:460px;text-align:center;color:#B7AAC6}
+  .empty-state .big-ico{width:80px;height:80px;border-radius:22px;background:var(--ink2);display:grid;place-items:center;font-size:38px;margin:0 auto 18px}
+  .loader{display:none;text-align:center;color:#CFC4DA;padding:40px}
+  .spin{width:46px;height:46px;border:4px solid #3a2d4c;border-top-color:var(--gold);border-radius:50%;margin:0 auto 16px;animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* ---------- DASHBOARD ---------- */
+  .dash-top{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:26px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+  .kpi .ico{width:40px;height:40px;border-radius:11px;background:var(--vsoft);display:grid;place-items:center;font-size:19px;margin-bottom:14px}
+  .kpi b{font-family:var(--serif);font-size:30px;display:block;line-height:1}
+  .kpi span{font-size:13px;color:var(--muted)}
+  .kpi .delta{font-size:12px;font-weight:700;color:var(--ok);margin-top:6px;display:inline-block}
+  .dash-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px}
+  .card-box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .card-box h3{font-size:18px;margin-bottom:4px}
+  .card-box .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+  .bars{display:flex;align-items:flex-end;gap:14px;height:200px;padding-top:10px}
+  .bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+  .bars .b .bar{width:100%;border-radius:8px 8px 0 0;background:linear-gradient(var(--vlight),var(--violet));transition:.6s}
+  .bars .b small{font-size:11px;color:var(--muted)}
+  .listrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .listrow:last-child{border:none}
+  .listrow .sw{width:42px;height:42px;border-radius:10px;overflow:hidden;flex-shrink:0}
+  .listrow .gr{flex:1}
+  .listrow .gr b{font-size:14px}.listrow .gr span{font-size:12px;color:var(--muted)}
+  .listrow .amt{font-weight:800;font-size:14px;color:var(--ok)}
+
+  /* ---------- UPLOAD ---------- */
+  .upload-grid{display:grid;grid-template-columns:1fr 360px;gap:30px;padding:34px 0}
+  .dropzone{border:2.5px dashed var(--line);border-radius:18px;background:#fff;padding:50px;text-align:center;transition:.2s;cursor:pointer}
+  .dropzone:hover{border-color:var(--vlight);background:#fdfbff}
+  .dropzone .big-ico{width:74px;height:74px;border-radius:20px;background:var(--vsoft);display:grid;place-items:center;font-size:34px;margin:0 auto 16px}
+  .form-field{margin-bottom:18px}
+  .form-field label{font-size:13.5px;font-weight:700;display:block;margin-bottom:7px}
+  .form-field input,.form-field textarea,.form-field select{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;font-family:var(--sans);font-size:14px}
+  .form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:none;border-color:var(--violet)}
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:12px}
+  .toggle-row .tl b{font-size:14px}.toggle-row .tl p{font-size:12px;color:var(--muted)}
+  .switch{width:46px;height:26px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+  .switch::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .switch.on{background:var(--violet)}
+  .switch.on::after{left:23px}
+
+  /* ---------- LEARN ---------- */
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .course{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.2s}
+  .course:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .course .cv{height:150px;position:relative}
+  .course .cv .lvl{position:absolute;top:12px;left:12px}
+  .course .cb{padding:18px}
+  .course h4{font-size:17px;font-family:var(--serif);margin-bottom:6px}
+  .course p{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .course .pbar{height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .course .pbar i{display:block;height:100%;background:var(--violet)}
+  .course .pmeta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
+
+  /* ---------- CTA + FOOTER ---------- */
+  .cta{background:var(--ink);color:#fff;position:relative;overflow:hidden;text-align:center}
+  .cta::before{content:"";position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(107,47,181,.5),transparent 70%);top:-180px;left:-120px}
+  .cta .wrap{position:relative;z-index:2;padding:80px 28px}
+  .cta h2{font-size:42px;line-height:1.1}
+  .cta h2 .g{color:var(--gold)}
+  .cta p{color:#CFC4DA;font-size:18px;margin:18px auto 30px;max-width:520px}
+  footer{background:#120D19;color:#9A8FA8;padding:48px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:30px}
+  footer h5{color:#fff;font-size:14px;margin-bottom:14px;letter-spacing:.5px}
+  footer a{display:block;font-size:13.5px;padding:5px 0;color:#9A8FA8}
+  footer a:hover{color:var(--gold)}
+  .foot-bottom{border-top:1px solid #271d33;padding-top:22px;display:flex;justify-content:space-between;font-size:12.5px;flex-wrap:wrap;gap:10px}
+
+  /* ---------- MODAL ---------- */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(26,20,35,.6);backdrop-filter:blur(4px);z-index:100;place-items:center;padding:24px}
+  .modal-bg.show{display:grid}
+  .modal{background:#fff;border-radius:22px;max-width:440px;width:100%;padding:32px;text-align:center;animation:pop .25s ease}
+  @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+  .modal .ic{width:64px;height:64px;border-radius:18px;background:var(--vsoft);display:grid;place-items:center;font-size:30px;margin:0 auto 16px}
+  .modal h3{font-size:23px;margin-bottom:8px}
+  .modal p{color:var(--muted);margin-bottom:22px}
+
+  .center{text-align:center}
+  .mt-s{margin-top:38px}
+
+  @media(max-width:920px){
+    .hero .wrap,.detail,.studio,.upload-grid{grid-template-columns:1fr}
+    .pillars,.steps,.grid-gal,.learn-grid,.dash-top,.dash-grid,.foot-grid{grid-template-columns:1fr 1fr}
+    nav.menu{display:none}
+    .collage{display:none}
+    .hero h1{font-size:38px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="logo" onclick="go('home')"><span class="mark">✦</span>ATELYR</div>
+    <nav class="menu" id="menu">
+      <a onclick="go('home')" data-p="home">Discover</a>
+      <a onclick="go('profile')" data-p="profile">Designers</a>
+      <a onclick="go('studio')" data-p="studio">Style AI</a>
+      <a onclick="go('learn')" data-p="learn">Learn</a>
+      <a onclick="go('dashboard')" data-p="dashboard">Dashboard</a>
+    </nav>
+    <div class="nav-spacer"></div>
+    <div class="nav-cta">
+      <button class="btn btn-ghost btn-sm" onclick="go('upload')">+ Publish work</button>
+      <div class="avatar" onclick="go('profile')" title="Your studio">MR</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================ HOME ============ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow on-dark">For designers, by design</div>
+        <h1 style="margin-top:16px">Your craft.<br>Your style.<br><span class="g">Your rights.</span></h1>
+        <p class="sub">The platform where designers skill up, publish their newest work, sell it, and train an AI in their own style — while keeping 100% of the patent and IP.</p>
+        <div class="actions">
+          <button class="btn btn-gold" onclick="go('upload')">Start your studio →</button>
+          <button class="btn btn-ghost on-dark" onclick="go('profile')">Explore designers</button>
+        </div>
+        <div class="trust">
+          <div><b>12k+</b>designers</div>
+          <div><b>$4.2M</b>paid to creators</div>
+          <div><b>100%</b>IP stays yours</div>
+        </div>
+      </div>
+      <div class="collage">
+        <div class="frame f1"><div class="art" id="ha1"></div></div>
+        <div class="frame f2"><div class="art" id="ha2"></div></div>
+        <div class="frame f3"><div class="art" id="ha3"></div></div>
+        <div class="badge-float bf1"><span class="dot" style="background:#FCEFD7">🔒</span> Patent owned by you</div>
+        <div class="badge-float bf2"><span class="dot" style="background:var(--vsoft)">🤖</span> Trained on consent</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip"><div class="wrap"><span>AS SEEN IN</span><span>DESIGN WEEK</span><span>CREATIVE REVIEW</span><span>AIGA</span><span>IT'S NICE THAT</span><span>DESIGN MILK</span></div></div>
+
+  <section><div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What ATELYR gives you</div>
+      <h2>Four pillars, one membership.</h2>
+      <p>Everything a working designer needs to grow, earn, and stay in control — in one place.</p>
+    </div>
+    <div class="pillars">
+      <div class="pcard"><div class="top"></div><div class="ico">🎓</div><h3>Skill</h3><p>Guided paths, peer critique, and craft challenges that keep your edge sharp.</p></div>
+      <div class="pcard"><div class="top"></div><div class="ico">🛍️</div><h3>Sell</h3><p>A clean storefront for your newest work — prints, files, licenses, commissions.</p></div>
+      <div class="pcard"><div class="top"></div><div class="ico">🤖</div><h3>Style AI</h3><p>Train a private model on your portfolio that generates only in your hand.</p></div>
+      <div class="pcard own"><div class="top"></div><div class="ico">🛡️</div><h3>Own</h3><p>Ironclad authorship and IP. The patent and rights stay 100% yours.</p></div>
+    </div>
+  </div></section>
+
+  <section style="padding-top:8px"><div class="wrap">
+    <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;max-width:none">
+      <div>
+        <div class="eyebrow">Fresh from the studios</div>
+        <h2 style="font-size:30px">Newest work</h2>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="go('profile')">View all →</button>
+    </div>
+    <div class="filters">
+      <span class="chip active">All</span><span class="chip">Illustration</span><span class="chip">Type</span><span class="chip">3D</span><span class="chip">Branding</span><span class="chip">Motion</span>
+    </div>
+    <div class="grid-gal" id="home-gallery"></div>
+  </div></section>
+
+  <section class="how"><div class="wrap">
+    <div class="section-head"><div class="eyebrow on-dark">How it works</div><h2 style="color:#fff">From your studio to a paying audience.</h2></div>
+    <div class="steps">
+      <div class="step"><div class="ico">⬆️</div><div class="n">01</div><h3>Publish</h3><p>Upload your newest work to your ATELYR profile.</p></div>
+      <div class="step"><div class="ico">✨</div><div class="n">02</div><h3>Train</h3><p>Opt pieces into your private Style AI when you're ready.</p></div>
+      <div class="step"><div class="ico">💰</div><div class="n">03</div><h3>Earn</h3><p>Buyers license, commission, or generate — you get paid.</p></div>
+      <div class="step own"><div class="ico">👑</div><div class="n">04</div><h3>Own</h3><p>Rights and patent stay with you, every step.</p></div>
+    </div>
+  </div></section>
+
+  <div class="cta"><div class="wrap">
+    <h2>Where designers — not middlemen<br>or scrapers — sit at the <span class="g">center.</span></h2>
+    <p>Claim your studio, publish your work, and start earning on your terms.</p>
+    <button class="btn btn-gold" onclick="go('upload')">Claim your studio</button>
+  </div></div>
+</div>
+
+<!-- ============================================================ PROFILE / STOREFRONT ============ -->
+<div class="page" id="page-profile">
+  <div class="profile-hero"><div class="wrap">
+    <div class="pic">MR</div>
+    <div>
+      <h1>Maya Reyes</h1>
+      <div class="handle">@mayadraws · Illustration & Type</div>
+      <p>Editorial illustrator working in warm, grainy gradients and hand-drawn type. Every piece — and every Style-AI render — is authored and owned by me.</p>
+      <div class="pstats">
+        <div><b>248</b><span>Works</span></div>
+        <div><b>9.1k</b><span>Followers</span></div>
+        <div><b>$86k</b><span>Earned</span></div>
+        <div><b>4.9★</b><span>Rating</span></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <div class="tabbar">
+      <a class="active">Work</a><a>Style AI</a><a>About</a><a>Reviews</a>
+    </div>
+
+    <div class="styleband">
+      <div>
+        <div class="eyebrow on-dark" style="margin-bottom:10px">Maya's Style AI · Live</div>
+        <h3>Generate in Maya's signature hand</h3>
+        <p>Maya has opted 60 works into a private model. Commission an on-brand render in seconds — she earns a royalty on every one, and her authorship travels with the output.</p>
+      </div>
+      <button class="btn btn-gold" style="position:relative;z-index:2" onclick="go('studio')">Try her Style AI →</button>
+    </div>
+
+    <div class="filters">
+      <span class="chip active">All work</span><span class="chip">For sale</span><span class="chip">Editorial</span><span class="chip">Lettering</span><span class="chip">Personal</span>
+    </div>
+    <div class="grid-gal" id="profile-gallery" style="margin-bottom:60px"></div>
+  </div>
+</div>
+
+<!-- ============================================================ WORK DETAIL ============ -->
+<div class="page" id="page-work">
+  <div class="wrap">
+    <div style="padding-top:20px"><a onclick="go('profile')" style="cursor:pointer;color:var(--muted);font-weight:600;font-size:14px">← Back to Maya's studio</a></div>
+    <div class="detail">
+      <div>
+        <div class="big"><div class="art" id="detail-art"></div></div>
+        <div class="thumbs">
+          <div class="t active"><div class="art" data-seed="11"></div></div>
+          <div class="t"><div class="art" data-seed="22"></div></div>
+          <div class="t"><div class="art" data-seed="33"></div></div>
+          <div class="t"><div class="art" data-seed="44"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="by"><div class="avatar">MR</div><div><b style="font-size:14px">Maya Reyes</b><div style="font-size:12px;color:var(--muted)">@mayadraws</div></div></div>
+        <span class="pill">Editorial illustration</span>
+        <h1 style="margin-top:12px">Midnight Bloom</h1>
+        <div style="display:flex;gap:18px;color:var(--muted);font-size:13px;margin-top:6px">
+          <span>🖌️ Original · 2026</span><span>📐 4500 × 6000 px</span><span>❤️ 1.2k</span>
+        </div>
+        <p class="desc">A grainy, hand-built gradient piece exploring nocturnal florals. Sold with a license of your choice — the artist retains full authorship and the underlying IP.</p>
+
+        <h4 style="font-size:14px;margin-bottom:6px">Choose a license</h4>
+        <div class="licbox">
+          <div class="lic active" onclick="pickLic(this,'Personal')"><div class="l"><h4>Personal</h4><p>Wallpaper, prints, non-commercial use</p></div><div class="p">$24</div></div>
+          <div class="lic" onclick="pickLic(this,'Commercial')"><div class="l"><h4>Commercial</h4><p>Marketing, packaging, up to 100k units</p></div><div class="p">$180</div></div>
+          <div class="lic" onclick="pickLic(this,'Extended')"><div class="l"><h4>Extended + source</h4><p>Layered file, unlimited commercial</p></div><div class="p">$420</div></div>
+        </div>
+        <button class="btn btn-violet" style="width:100%;justify-content:center" onclick="openModal('buy')">Buy license · <span id="lic-price">$24</span></button>
+        <div class="own-note">🛡️ <div><b>The artist keeps everything.</b> You're buying a license to use this work — Maya retains the copyright, the patent, and the right to her style.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ STYLE AI STUDIO ============ -->
+<div class="page" id="page-studio">
+  <div class="wrap">
+    <div class="section-head" style="padding-top:34px;margin-bottom:6px">
+      <div class="eyebrow">Style AI Studio</div>
+      <h2>Generate in a designer's signature style.</h2>
+      <p>Consent-based. Every render is attributed and earns the artist a royalty.</p>
+    </div>
+    <div class="studio">
+      <div class="panel">
+        <div class="modelchip"><div class="avatar">MR</div><div><b>Maya Reyes</b><br><span>Style model · v3</span></div></div>
+        <label>Describe what you want</label>
+        <textarea id="prompt" rows="4" placeholder="e.g. a fox curled under neon city rain, warm grain, hand-drawn">a lone lighthouse in a sea of wildflowers at dusk</textarea>
+        <label>Format</label>
+        <select><option>Square · 1:1</option><option>Portrait · 4:5</option><option>Wide · 16:9</option></select>
+        <label>Variations</label>
+        <select id="varcount"><option>4 renders</option><option>2 renders</option><option>1 render</option></select>
+        <label>Strength of Maya's hand</label>
+        <input type="range" min="0" max="100" value="80">
+        <button class="btn btn-violet" style="width:100%;justify-content:center;margin-top:20px" onclick="generate()">✨ Generate</button>
+        <div class="own-note" style="margin-top:16px">👑 Outputs are watermarked and credited to Maya. She earns a royalty on every generation.</div>
+      </div>
+      <div class="canvas">
+        <div class="ch">
+          <div><b style="font-family:var(--serif);font-size:18px">Renders</b></div>
+          <span class="pill gold">Royalty to artist · on</span>
+        </div>
+        <div class="empty-state" id="studio-empty">
+          <div><div class="big-ico">🎨</div><b style="color:#fff;font-size:17px;display:block;margin-bottom:6px">Your renders will appear here</b>Write a prompt and hit Generate to see Maya's style come to life.</div>
+        </div>
+        <div class="loader" id="studio-loading"><div class="spin"></div>Painting in Maya's style…</div>
+        <div class="gen-grid" id="studio-results" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DASHBOARD ============ -->
+<div class="page" id="page-dashboard">
+  <div class="wrap" style="padding-top:34px">
+    <div class="section-head" style="margin-bottom:24px"><div class="eyebrow">Your studio</div><h2>Welcome back, Maya.</h2></div>
+    <div class="dash-top">
+      <div class="kpi"><div class="ico">💰</div><b>$86,240</b><span>Total earned</span><br><span class="delta">▲ 12% this month</span></div>
+      <div class="kpi"><div class="ico">🛒</div><b>1,284</b><span>Licenses sold</span><br><span class="delta">▲ 8%</span></div>
+      <div class="kpi"><div class="ico">🤖</div><b>3,910</b><span>Style-AI renders</span><br><span class="delta">▲ 31%</span></div>
+      <div class="kpi"><div class="ico">👁️</div><b>248k</b><span>Profile views</span><br><span class="delta">▲ 5%</span></div>
+    </div>
+    <div class="dash-grid">
+      <div class="card-box">
+        <h3>Earnings</h3><div class="sub">Last 8 months · licenses + Style-AI royalties</div>
+        <div class="bars" id="dash-bars"></div>
+      </div>
+      <div class="card-box">
+        <h3>Recent sales</h3><div class="sub">Latest activity across your work</div>
+        <div id="dash-sales"></div>
+      </div>
+    </div>
+    <div class="card-box" style="margin:22px 0 60px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div><h3>Your work</h3><div class="sub">248 published · 60 in Style AI</div></div>
+        <button class="btn btn-violet btn-sm" onclick="go('upload')">+ Publish new</button>
+      </div>
+      <div class="grid-gal" id="dash-works" style="grid-template-columns:repeat(4,1fr);margin-top:14px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ UPLOAD ============ -->
+<div class="page" id="page-upload">
+  <div class="wrap">
+    <div class="section-head" style="padding-top:34px;margin-bottom:10px"><div class="eyebrow">Publish</div><h2>Add your newest work.</h2><p>It stays 100% yours. You decide how it's sold and whether it joins your Style AI.</p></div>
+    <div class="upload-grid">
+      <div>
+        <div class="dropzone" onclick="openModal('upload')">
+          <div class="big-ico">⬆️</div>
+          <b style="font-size:18px;display:block;margin-bottom:6px">Drag & drop your files</b>
+          <span style="color:var(--muted)">PNG, JPG, SVG, PDF or layered files · up to 200MB</span><br><br>
+          <span class="btn btn-ghost btn-sm">Browse files</span>
+        </div>
+        <div style="margin-top:24px">
+          <div class="form-field"><label>Title</label><input placeholder="Give your piece a name"></div>
+          <div class="form-field"><label>Description</label><textarea rows="3" placeholder="Tell collectors about this work…"></textarea></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-field"><label>Category</label><select><option>Illustration</option><option>Type & lettering</option><option>3D</option><option>Branding</option><option>Motion</option></select></div>
+            <div class="form-field"><label>Tags</label><input placeholder="grain, gradient, floral"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card-box" style="padding:22px">
+          <h3 style="font-size:16px;margin-bottom:16px">Rights & sales</h3>
+          <div class="form-field"><label>License price (Personal)</label><input value="$24"></div>
+          <div class="form-field"><label>Commercial price</label><input value="$180"></div>
+          <div class="toggle-row"><div class="tl"><b>List for sale</b><p>Show in the marketplace</p></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="tl"><b>Add to my Style AI</b><p>Opt this piece into your model</p></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          <div class="own-note" style="margin-top:8px">🛡️ You retain copyright, patent, and full authorship. Nothing trains any model without your explicit opt-in.</div>
+          <button class="btn btn-violet" style="width:100%;justify-content:center;margin-top:18px" onclick="openModal('published')">Publish work</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ LEARN ============ -->
+<div class="page" id="page-learn">
+  <div class="wrap">
+    <div class="section-head" style="padding-top:34px"><div class="eyebrow">Skill up</div><h2>Sharpen your craft.</h2><p>Guided paths, live challenges, and critique from designers you admire.</p></div>
+    <div class="filters">
+      <span class="chip active">All</span><span class="chip">Illustration</span><span class="chip">Type</span><span class="chip">3D</span><span class="chip">Business of design</span><span class="chip">Style AI</span>
+    </div>
+    <div class="learn-grid" id="learn-grid" style="margin-bottom:24px"></div>
+
+    <div class="styleband" style="margin-bottom:60px">
+      <div>
+        <div class="eyebrow on-dark" style="margin-bottom:10px">Weekly challenge</div>
+        <h3>Grainy gradients: 7-day sprint</h3>
+        <p>Post a piece a day, get peer critique, and the top three join the featured gallery. 1,420 designers are in this week.</p>
+      </div>
+      <button class="btn btn-gold" style="position:relative;z-index:2">Join the challenge →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer><div class="wrap">
+  <div class="foot-grid">
+    <div>
+      <div class="logo" style="color:#fff;margin-bottom:12px"><span class="mark">✦</span>ATELYR</div>
+      <p style="font-size:13.5px;max-width:260px">The platform where designers own their craft — skill up, sell, and let AI work in your style, with rights that stay yours.</p>
+    </div>
+    <div><h5>Product</h5><a onclick="go('profile')">Discover</a><a onclick="go('studio')">Style AI</a><a onclick="go('learn')">Learn</a><a onclick="go('upload')">Publish</a></div>
+    <div><h5>For designers</h5><a>Pricing</a><a>Rights & IP</a><a>Royalties</a><a>Success stories</a></div>
+    <div><h5>Company</h5><a>About</a><a>Careers</a><a>Blog</a><a>Contact</a></div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 ATELYR · atelyr.it.com · Patents & IP belong to the designers.</span><span>Privacy · Terms · Consent policy</span></div>
+</div></footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="ic" id="modal-ic">✓</div>
+    <h3 id="modal-title">Done</h3>
+    <p id="modal-text">Action complete.</p>
+    <button class="btn btn-violet" style="width:100%;justify-content:center" onclick="closeModal()">Got it</button>
+  </div>
+</div>
+
+<script>
+// ---------- palette for generated art ----------
+const PALETTES=[
+  ['#6B2FB5','#9B5DE5','#F4A93C'],['#1A1423','#6B2FB5','#E8A0BF'],
+  ['#F4A93C','#E8607A','#6B2FB5'],['#2E9E6B','#9B5DE5','#F4A93C'],
+  ['#E8607A','#F4A93C','#FBF7F2'],['#3A2D8A','#9B5DE5','#F4D35E'],
+  ['#B5179E','#7209B7','#F4A93C'],['#0E7C7B','#9B5DE5','#F4A93C'],
+];
+function art(seed){
+  const p=PALETTES[seed%PALETTES.length];
+  const a=(seed*47)%360;
+  const shapes=[];
+  for(let i=0;i<3;i++){
+    const cx=20+((seed*(i+3)*29)%70),cy=20+((seed*(i+5)*17)%70),r=18+((seed*(i+2)*13)%34);
+    shapes.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${p[(i+1)%3]}" opacity="0.85"/>`);
+  }
+  return `<svg class="art" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="g${seed}" x1="0" y1="0" x2="1" y2="1" gradientTransform="rotate(${a} .5 .5)">
+    <stop offset="0" stop-color="${p[0]}"/><stop offset="1" stop-color="${p[1]}"/></linearGradient>
+    <filter id="b${seed}"><feGaussianBlur stdDeviation="6"/></filter></defs>
+    <rect width="100" height="100" fill="url(#g${seed})"/>
+    <g filter="url(#b${seed})">${shapes.join('')}</g>
+  </svg>`;
+}
+function fillArt(el,seed){el.innerHTML=art(seed);el.style.height='100%';}
+
+// ---------- data ----------
+const WORKS=[
+  {t:'Midnight Bloom',cat:'Editorial',price:24,ai:true,seed:11},
+  {t:'Neon Rituals',cat:'Illustration',price:32,ai:true,seed:23},
+  {t:'Paper Sun',cat:'Lettering',price:18,ai:false,seed:7},
+  {t:'Garden of Static',cat:'3D',price:46,ai:true,seed:41},
+  {t:'Soft Machines',cat:'Branding',price:120,ai:false,seed:5},
+  {t:'Tidal Type',cat:'Lettering',price:28,ai:true,seed:33},
+  {t:'Velvet Noise',cat:'Editorial',price:38,ai:true,seed:14},
+  {t:'Citrus Hours',cat:'Illustration',price:22,ai:false,seed:9},
+  {t:'Dust & Gold',cat:'3D',price:54,ai:true,seed:27},
+];
+function workCard(w){
+  return `<div class="work" onclick="go('work')">
+    <div class="thumb">${art(w.seed)}
+      <span class="tag pill">${w.cat}</span>
+      ${w.ai?'<span class="ai">🤖 Style AI</span>':''}
+    </div>
+    <div class="meta">
+      <div class="by"><div class="avatar">MR</div><span>Maya Reyes</span></div>
+      <h4>${w.t}</h4>
+      <div class="row"><div class="price">$${w.price} <small>/ license</small></div><button class="btn btn-ghost btn-sm">View</button></div>
+    </div>
+  </div>`;
+}
+const COURSES=[
+  {t:'Grainy gradients from scratch',by:'Maya Reyes',lvl:'Intermediate',prog:62,len:'8 lessons',seed:11},
+  {t:'Hand-lettering for editorial',by:'Theo Park',lvl:'Beginner',prog:0,len:'12 lessons',seed:7},
+  {t:'Pricing your work & licensing',by:'ATELYR',lvl:'All levels',prog:100,len:'6 lessons',seed:5},
+  {t:'Training your Style AI well',by:'ATELYR Labs',lvl:'Intermediate',prog:25,len:'5 lessons',seed:41},
+  {t:'3D for 2D illustrators',by:'Lina Cho',lvl:'Advanced',prog:0,len:'10 lessons',seed:27},
+  {t:'Building a body of work',by:'Maya Reyes',lvl:'All levels',prog:48,len:'7 lessons',seed:23},
+];
+function courseCard(c){
+  return `<div class="course">
+    <div class="cv">${art(c.seed)}<span class="lvl pill gold">${c.lvl}</span></div>
+    <div class="cb"><h4>${c.t}</h4><p>with ${c.by} · ${c.len}</p>
+      <div class="pbar"><i style="width:${c.prog}%"></i></div>
+      <div class="pmeta"><span>${c.prog?c.prog+'% complete':'Not started'}</span><span>${c.prog===100?'✓ Done':'Continue →'}</span></div>
+    </div></div>`;
+}
+const SALES=[
+  {t:'Midnight Bloom',type:'Commercial license',amt:180,seed:11},
+  {t:'Neon Rituals',type:'Style-AI render ×3',amt:27,seed:23},
+  {t:'Dust & Gold',type:'Extended + source',amt:420,seed:27},
+  {t:'Tidal Type',type:'Personal license',amt:28,seed:33},
+  {t:'Velvet Noise',type:'Style-AI render ×8',amt:72,seed:14},
+];
+
+// ---------- render dynamic content ----------
+function boot(){
+  fillArt(document.getElementById('ha1'),11);
+  fillArt(document.getElementById('ha2'),23);
+  fillArt(document.getElementById('ha3'),41);
+  document.getElementById('home-gallery').innerHTML=WORKS.slice(0,6).map(workCard).join('');
+  document.getElementById('profile-gallery').innerHTML=WORKS.map(workCard).join('');
+  document.getElementById('learn-grid').innerHTML=COURSES.map(courseCard).join('');
+  fillArt(document.getElementById('detail-art'),11);
+  document.querySelectorAll('.thumbs .t .art').forEach(el=>fillArt(el,+el.dataset.seed));
+  // dashboard bars
+  const vals=[5.2,6.1,5.8,7.4,8.9,8.2,10.4,12.1],max=Math.max(...vals),mo=['Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
+  document.getElementById('dash-bars').innerHTML=vals.map((v,i)=>`<div class="b"><div class="bar" style="height:${(v/max*100)}%" title="$${v}k"></div><small>${mo[i]}</small></div>`).join('');
+  document.getElementById('dash-sales').innerHTML=SALES.map(s=>`<div class="listrow"><div class="sw">${art(s.seed)}</div><div class="gr"><b>${s.t}</b><br><span>${s.type}</span></div><div class="amt">+$${s.amt}</div></div>`).join('');
+  document.getElementById('dash-works').innerHTML=WORKS.slice(0,4).map(w=>`<div class="work" onclick="go('work')"><div class="thumb" style="height:150px">${art(w.seed)}${w.ai?'<span class="ai">🤖</span>':''}</div><div class="meta" style="padding:12px"><h4 style="font-size:14px">${w.t}</h4><div class="row" style="margin-top:6px"><span class="price" style="font-size:14px">$${w.price}</span></div></div></div>`).join('');
+}
+
+// ---------- navigation ----------
+function go(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('#menu a').forEach(a=>a.classList.toggle('active',a.dataset.p===p));
+  window.scrollTo({top:0,behavior:'instant'});
+}
+// ---------- interactions ----------
+function pickLic(el,name){
+  document.querySelectorAll('.lic').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+  const price=el.querySelector('.p').textContent;
+  document.getElementById('lic-price').textContent=price;
+}
+function generate(){
+  document.getElementById('studio-empty').style.display='none';
+  document.getElementById('studio-results').style.display='none';
+  document.getElementById('studio-loading').style.display='block';
+  const n=parseInt(document.getElementById('varcount').value)||4;
+  setTimeout(()=>{
+    document.getElementById('studio-loading').style.display='none';
+    const grid=document.getElementById('studio-results');
+    grid.style.display='grid';
+    let html='';
+    for(let i=0;i<n;i++){const s=Math.floor(Math.random()*900)+10;html+=`<div class="gen">${art(s)}<span class="ovl">🛡️ © Maya Reyes</span></div>`;}
+    grid.innerHTML=html;
+  },1500);
+}
+const MODALS={
+  buy:{ic:'🎉',t:'License purchased',x:"Your file is ready to download. Maya keeps full copyright — you've got a license to use it."},
+  published:{ic:'✨',t:'Work published',x:"Your piece is live on your studio. Rights and patent stay 100% yours."},
+  upload:{ic:'⬆️',t:'File picker',x:"In the live product this opens your file browser to select work to upload."}
+};
+function openModal(k){
+  const m=MODALS[k];document.getElementById('modal-ic').textContent=m.ic;
+  document.getElementById('modal-title').textContent=m.t;document.getElementById('modal-text').textContent=m.x;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+boot();
+</script>
+</body>
+</html>
